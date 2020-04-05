@@ -13,7 +13,7 @@ public class Mesh implements Linker {
 
     public Mesh(CellFactory factory) {
         this.factory = factory;
-        List<Cell> initialMesh = factory.createUniformInitialMesh();
+        List<Cell> initialMesh = factory.createUniformInitialMesh(this);
         for (Cell cell : initialMesh) {
             content.put(cell.getPosition(), cell);
         }

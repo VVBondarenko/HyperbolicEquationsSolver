@@ -9,4 +9,10 @@ public interface Problem {
     RealMatrix computeJacobian(RealVector value);
 
     RealVector getInitialValue(Double position);
+
+    Double getLeftBoundary();
+
+    Double getRightBoundary();
+
+    Integer getResolution();
 }
