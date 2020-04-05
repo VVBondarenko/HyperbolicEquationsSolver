@@ -37,6 +37,18 @@ public abstract class Cell {
     public abstract void computeVelocity();
 
     public void performTimeStep() {
-       value = value.subtract(valueVelocity.mapMultiply(basicTimeStep));
+        value = value.subtract(valueVelocity.mapMultiply(basicTimeStep));
+    }
+
+    public Double getPosition() {
+        return position;
+    }
+
+    public RealVector getValue() {
+        return value;
+    }
+
+    public RealVector getValueVelocity() {
+        return valueVelocity;
     }
 }

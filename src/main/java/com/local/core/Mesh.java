@@ -1,27 +1,54 @@
 package com.local.core;
 
-import java.util.ArrayList;
+import org.apache.commons.math3.linear.RealVector;
+
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 public class Mesh implements Linker {
-    protected List<Cell> content = new ArrayList<>();
+    protected CellFactory factory;
+    protected NavigableMap<Double, Cell> content = new TreeMap<>();
+
+    public Mesh(CellFactory factory) {
+        this.factory = factory;
+        List<Cell> initialMesh = factory.createUniformInitialMesh();
+        for (Cell cell : initialMesh) {
+            content.put(cell.getPosition(), cell);
+        }
+    }
 
     public void performTimeStep() {
-        content.stream()
+        content.keySet().stream()
+                .map(content::get)
                 .peek(Cell::updateDynamicProperties)
                 .peek(Cell::computeVelocity)
                 .forEach(Cell::performTimeStep);
     }
 
+    public RealVector getValueAt(Double position) {
+        Map.Entry<Double, Cell> floorEntry = content.floorEntry(position);
+        Cell floor = floorEntry.getValue();
 
-    //todo: implement linkers methods
+        Map.Entry<Double, Cell> ceilingEntry = content.ceilingEntry(position);
+        Cell ceiling = ceilingEntry.getValue();
+
+        RealVector valueDifference = ceiling.getValue().subtract(floor.getValue());
+        double coefficient = (position - floorEntry.getKey()) / (ceilingEntry.getKey() - floorEntry.getKey());
+
+        return valueDifference.mapMultiplyToSelf(coefficient).add(floor.getValue());
+    }
+
     @Override
     public Cell getNext(Cell cell) {
-        return null;
+        Map.Entry<Double, Cell> entry = content.higherEntry(cell.getPosition());
+        return entry.getValue();
     }
 
     @Override
     public Cell getPrevious(Cell cell) {
-        return null;
+        Map.Entry<Double, Cell> entry = content.lowerEntry(cell.getPosition());
+        return entry.getValue();
     }
 }
