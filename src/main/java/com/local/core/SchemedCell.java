@@ -13,9 +13,14 @@ public abstract class SchemedCell extends Cell {
     @Override
     public void computeVelocity() {
         Cell left = linker.getPrevious(this);
-        RealVector leftFlux = computeFluxOverBoundary(left, this);
-
         Cell right = linker.getNext(this);
+
+        if (left == null || right == null) {
+            valueVelocity = value.mapMultiply(0.);
+            return;
+        }
+
+        RealVector leftFlux = computeFluxOverBoundary(left, this);
         RealVector rightFlux = computeFluxOverBoundary(this, right);
 
         double dx = (right.position + left.position) * 0.5;

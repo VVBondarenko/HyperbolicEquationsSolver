@@ -16,6 +16,8 @@ public class GodunovRoeCell extends SchemedCell {
 
     @Override
     protected RealVector computeFluxOverBoundary(Cell left, Cell right) {
+        if (left == null || right == null)
+            return value.mapMultiply(0.);
         RealVector roesFlux = getRoesFlux(left, right);
         return getMiddle(left.getFlux(), right.getFlux()).subtract(roesFlux);
     }

@@ -2,10 +2,7 @@ package com.local.core;
 
 import org.apache.commons.math3.linear.RealVector;
 
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Mesh implements Linker {
     protected CellFactory factory;
@@ -22,7 +19,9 @@ public class Mesh implements Linker {
     public void performTimeStep() {
         content.keySet().stream()
                 .map(content::get)
-                .peek(Cell::updateDynamicProperties)
+                .forEach(Cell::updateDynamicProperties);
+        content.keySet().stream()
+                .map(content::get)
                 .peek(Cell::computeVelocity)
                 .forEach(Cell::performTimeStep);
     }
@@ -43,12 +42,16 @@ public class Mesh implements Linker {
     @Override
     public Cell getNext(Cell cell) {
         Map.Entry<Double, Cell> entry = content.higherEntry(cell.getPosition());
+        if (entry == null)
+            return null;
         return entry.getValue();
     }
 
     @Override
     public Cell getPrevious(Cell cell) {
         Map.Entry<Double, Cell> entry = content.lowerEntry(cell.getPosition());
+        if (entry == null)
+            return null;
         return entry.getValue();
     }
 }

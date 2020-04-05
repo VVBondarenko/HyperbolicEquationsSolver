@@ -48,4 +48,19 @@ public abstract class Cell {
     public RealVector getValueVelocity() {
         return valueVelocity;
     }
+
+    @Override
+    public String toString() {
+        return "Cell{" +
+                "position=" + position +
+                ", value=" + value +
+                ", valueVelocity=" + valueVelocity +
+                ", flux=" + flux +
+                ", problem=" + problem +
+                '}';
+    }
+
+    public static void setBasicTimeStep(double basicTimeStep) {
+        Cell.basicTimeStep = basicTimeStep;
+    }
 }

@@ -33,4 +33,9 @@ public class CellFactoryImpl implements CellFactory {
         }
         return uniformMesh;
     }
+
+    @Override
+    public void setTimeStep(double step) {
+        Cell.setBasicTimeStep(step);
+    }
 }
