@@ -7,4 +7,6 @@ public interface Problem {
     RealMatrix computeFlux(RealVector value);
 
     RealMatrix computeJacobian(RealVector value);
+
+    RealVector getInitialValue(RealVector position);
 }

@@ -6,16 +6,37 @@ import org.apache.commons.math3.linear.RealVector;
 
 public abstract class Cell {
     protected RealVector position;
-    protected Pair<Cell, Cell> neighbours;
+    protected Pair<Cell, Cell> neighbours = Pair.empty();
 
     protected RealVector value;
     protected RealVector valueVelocity;
-    protected double basicTimeStep;
+    protected static double basicTimeStep;
 
     protected RealMatrix flux; //Flux parts for each unknown value
     protected RealMatrix jacobian;
 
     protected Problem problem;
+
+    public Cell(RealVector position, Problem problem) {
+        this.position = position;
+        this.problem = problem;
+        value = problem.getInitialValue(position);
+    }
+
+    public Cell(Pair<Cell,Cell> neighbours) {
+        this.neighbours = neighbours;
+
+        Cell left = neighbours.getLeft();
+        Cell right = neighbours.getRight();
+
+        position = left.position.add(right.position).mapMultiplyToSelf(0.5);
+        value = left.value.add(right.value).mapMultiplyToSelf(0.5);
+        problem = left.problem;
+    }
+
+    public void setNeighbours(Pair<Cell, Cell> neighbours) {
+        this.neighbours = neighbours;
+    }
 
     public void updateDynamicProperties() {
         updateFlux();
@@ -48,4 +69,8 @@ public abstract class Cell {
     }
 
     protected abstract RealVector computeFluxOverBoundary(Cell left, Cell right);
+
+    public void performTimeStep() {
+       value = value.subtract(valueVelocity.mapMultiply(basicTimeStep));
+    }
 }
