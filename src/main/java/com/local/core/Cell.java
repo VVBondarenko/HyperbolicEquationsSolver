@@ -1,6 +1,5 @@
 package com.local.core;
 
-import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
 public abstract class Cell {
@@ -11,7 +10,6 @@ public abstract class Cell {
     protected static double basicTimeStep;
 
     protected RealVector flux; //Flux parts for each unknown value
-    protected RealMatrix jacobian;
 
     protected Problem problem;
 
@@ -23,15 +21,10 @@ public abstract class Cell {
 
     public void updateDynamicProperties() {
         updateFlux();
-        updateJacobian();
     }
 
     private void updateFlux() {
         flux = problem.computeFlux(value);
-    }
-
-    private void updateJacobian() {
-        jacobian = problem.computeJacobian(value);
     }
 
     public abstract void computeVelocity();
@@ -46,6 +39,10 @@ public abstract class Cell {
 
     public RealVector getValue() {
         return value;
+    }
+
+    public RealVector getFlux() {
+        return flux;
     }
 
     public RealVector getValueVelocity() {
