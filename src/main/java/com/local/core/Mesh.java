@@ -3,7 +3,7 @@ package com.local.core;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Mesh {
+public class Mesh implements Linker {
     protected List<Cell> content = new ArrayList<>();
 
     public void performTimeStep() {
@@ -11,5 +11,17 @@ public class Mesh {
                 .peek(Cell::updateDynamicProperties)
                 .peek(Cell::computeVelocity)
                 .forEach(Cell::performTimeStep);
+    }
+
+
+    //todo: implement linkers methods
+    @Override
+    public Cell getNext(Cell cell) {
+        return null;
+    }
+
+    @Override
+    public Cell getPrevious(Cell cell) {
+        return null;
     }
 }
