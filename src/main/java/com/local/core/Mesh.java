@@ -17,12 +17,15 @@ public class Mesh implements Linker {
     }
 
     public void performTimeStep() {
+        //todo: заменить на CyclicBarrier, проверить производительность
         content.keySet().stream()
                 .map(content::get)
                 .forEach(Cell::updateDynamicProperties);
         content.keySet().stream()
                 .map(content::get)
-                .peek(Cell::computeVelocity)
+                .forEach(Cell::computeVelocity);
+        content.keySet().stream()
+                .map(content::get)
                 .forEach(Cell::performTimeStep);
     }
 
@@ -32,6 +35,9 @@ public class Mesh implements Linker {
 
         Map.Entry<Double, Cell> ceilingEntry = content.ceilingEntry(position);
         Cell ceiling = ceilingEntry.getValue();
+
+        if (floor == ceiling)
+            return floor.getValue();
 
         RealVector valueDifference = ceiling.getValue().subtract(floor.getValue());
         double coefficient = (position - floorEntry.getKey()) / (ceilingEntry.getKey() - floorEntry.getKey());
