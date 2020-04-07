@@ -27,5 +27,22 @@ public abstract class SchemedCell extends Cell {
         valueVelocity = rightFlux.subtract(leftFlux).mapDivideToSelf(dx);
     }
 
+    @Override
+    public void performTimeStep() {
+        Cell left = linker.getPrevious(this);
+        Cell right = linker.getNext(this);
+        if (left == null) {
+            value = right.getValue().copy();
+            return;
+        }
+
+        if (right == null) {
+            value = left.getValue().copy();
+            return;
+        }
+
+        super.performTimeStep();
+    }
+
     protected abstract RealVector computeFluxOverBoundary(Cell left, Cell right);
 }

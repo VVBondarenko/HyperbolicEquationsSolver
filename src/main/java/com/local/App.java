@@ -3,7 +3,7 @@ package com.local;
 import com.local.core.CellFactory;
 import com.local.core.Mesh;
 import com.local.core.Problem;
-import com.local.problem.RiemannProblem;
+import com.local.problem.VoidFormationProblem;
 import com.local.scheme.CellFactoryImpl;
 import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.SwingWrapper;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 
 public class App {
-    private Problem problem = new RiemannProblem();
+    private Problem problem = new VoidFormationProblem();
     private CellFactory factory = new CellFactoryImpl(problem);
     private Mesh mesh;
     private XYChart chart;
@@ -62,13 +62,13 @@ public class App {
     private List<Double> getYValues() {
         List<Double> xValues = getXValues();
         return xValues.stream()
-                .map(mesh::getValueAt).map(vector -> vector.getEntry(0))
+                .map(mesh::getValueAt).map(vector -> Math.log(vector.getEntry(0)))
                 .collect(Collectors.toList());
     }
 
     public void solve() {
-        factory.setTimeStep(1.e-4);
-        for (int i = 0; i < 300000; i++) {
+        factory.setTimeStep(1.e-3);
+        for (int i = 0; i < 300_000; i++) {
             mesh.performTimeStep();
             if (i != 0 && i % 100 == 0)
                 updateChart();
