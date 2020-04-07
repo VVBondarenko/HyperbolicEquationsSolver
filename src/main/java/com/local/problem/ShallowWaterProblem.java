@@ -58,6 +58,6 @@ public class ShallowWaterProblem implements Problem {
 
     @Override
     public Integer getResolution() {
-        return 100;
+        return 200;
     }
 }

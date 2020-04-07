@@ -18,13 +18,13 @@ public class Mesh implements Linker {
 
     public void performTimeStep() {
         //todo: заменить на CyclicBarrier, проверить производительность
-        content.keySet().stream()
+        content.keySet().stream().parallel()
                 .map(content::get)
                 .forEach(Cell::updateDynamicProperties);
-        content.keySet().stream()
+        content.keySet().stream().parallel()
                 .map(content::get)
                 .forEach(Cell::computeVelocity);
-        content.keySet().stream()
+        content.keySet().stream().parallel()
                 .map(content::get)
                 .forEach(Cell::performTimeStep);
     }

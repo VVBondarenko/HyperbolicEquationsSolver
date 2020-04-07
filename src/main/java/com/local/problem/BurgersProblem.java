@@ -6,7 +6,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
-class BurgersProblem implements Problem {
+public class BurgersProblem implements Problem {
     @Override
     public RealVector computeFlux(RealVector value) {
         return value.ebeMultiply(value).mapMultiplyToSelf(0.5);

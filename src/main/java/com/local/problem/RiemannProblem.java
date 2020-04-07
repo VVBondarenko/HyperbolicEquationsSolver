@@ -6,7 +6,7 @@ import org.apache.commons.math3.linear.ArrayRealVector;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
-class RiemannProblem implements Problem {
+public class RiemannProblem implements Problem {
     private final double rho0 = 1.;
     private final double a0 = 1.;
 
@@ -38,7 +38,7 @@ class RiemannProblem implements Problem {
     }
 
     private double getInitialValue(double position) {
-        if (position < 0.251)
+        if (position > 0.333 && position < 0.666)
             return 1.;
         return 0.;
     }
